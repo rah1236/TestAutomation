@@ -13,7 +13,7 @@ try:
    instrument.timeout = 5000  # milliseconds
   
    # Send a command (example: *IDN? is a common identification query)
-   response = float(instrument.query(':MEASure:VAMP?'))
+   response = float(instrument.query('*IDN?'))
    print(f"Device response: {response}")
 
    # Close the connection
