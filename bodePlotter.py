@@ -32,8 +32,8 @@ def plot_frequency_response(frequencies, amplitudes, filename):
 # Create a Resource Manager
 rm = pyvisa.ResourceManager()
 
-scope_address = 'TCPIP0::129.65.138.235::inst0::INSTR'
-wavegen_address = ''
+scope_address  = 'TCPIP0::192.168.2.2::INSTR'
+wavegen_address = 'TCPIP0::192.168.2.3::INSTR'
 
 try:
     scope = rm.open_resource(scope_address)
@@ -44,9 +44,11 @@ try:
     wavegen.timeout = 5000
    
     #initialize scope
+    # INSERT COMMANDS TO INIT SCOPE
 
 
     #init wavegen
+    # INSERT COMMANDS TO INIT WAVE GEN
 
 
     # Frequency sweep parameters
@@ -64,19 +66,19 @@ try:
         print(f"Testing at {freq}")
 
         # Set frequency Turn on Wave Gen output
+        # INSERT COMMANDS TO SET FREQUENCY AND TURN ON WAVE GEN
 
 
-
-        time.sleep(0.5)  # Allow settling time
+        time.sleep(1)  # Allow settling time
         
-        # Take measurement
+        # Readjust Scope display
         scope.write(":AUToset")
-        time.sleep(0.5)
+        time.sleep(1.5)
         
+        #take measurement
         try:
-            measurement = #INSERT SCOPE AMPLITUDE MEASUREMENT
-            amp_value = float(measurement.strip())
-            amplitudes.append(amp_value)
+            measurement = float() #INSERT SCOPE AMPLITUDE MEASUREMENT)
+            amplitudes.append(measurement)
         except Exception as e:
             print(f"Error at {freq} Hz: {e}")
             amplitudes.append(0)

@@ -32,8 +32,8 @@ def plot_frequency_response(frequencies, amplitudes, filename):
 # Create a Resource Manager
 rm = pyvisa.ResourceManager()
 
-scope_address = 'TCPIP0::129.65.138.235::inst0::INSTR'
-wavegen_address = ''
+scope_address  = 'TCPIP0::192.168.2.2::INSTR'
+wavegen_address = 'TCPIP0::192.168.2.3::INSTR'
 
 try:
     scope = rm.open_resource(scope_address)
@@ -46,7 +46,7 @@ try:
     #initialize scope
     scope.write(":CHANNEL1:DISPLAY ON")
     scope.write(":AUToset")
-    scope.write(":CHANNEL1:COUPLING AC")
+    # scope.write(":CHANNEL1:COUPLING AC")
 
     #init wavegen
     wavegen.write(":SOURce1:FUNCtion:SHAPe SIN")
@@ -55,9 +55,9 @@ try:
     wavegen.write(":OUTPut1:STATe OFF")
 
     # Frequency sweep parameters
-    start_freq = 1      # 1 Hz
-    stop_freq = 20000   # 20 kHz
-    points = 20
+    start_freq = 1000      # 1 Hz
+    stop_freq = 200000   # 20 kHz
+    points = 100
 
     frequencies = np.logspace(np.log10(start_freq), np.log10(stop_freq), points)
     print(f"Starting point-by-point sweep from {start_freq} Hz to {stop_freq} Hz with {points} points")
@@ -72,19 +72,25 @@ try:
         wavegen.write(f":SOURce1:FREQuency:FIXed {freq}")
         wavegen.write(":OUTPut1:STATe ON")
 
-        time.sleep(0.5)  # Allow settling time
+        time.sleep(1)  # Allow settling time
         
-        # Take measurement
+        # Readjust Scope display
         scope.write(":AUToset")
-        time.sleep(0.5)
+        time.sleep(1.5)
         
+        #take measurement
         try:
-            measurement = scope.query(':MEASure:VAMP?')
-            amp_value = float(measurement.strip())
-            amplitudes.append(amp_value)
+            measurement = float(scope.query(':MEASure:VAMP?'))
+            print(f"Device response: {measurement}")
+
+            amplitudes.append(measurement)
         except Exception as e:
             print(f"Error at {freq} Hz: {e}")
             amplitudes.append(0)
+
+    plot_frequency_response(frequencies, amplitudes, "filename.png")  
+    
+    wavegen.write(":OUTPut1:STATe OFF")
 
     # Close the connection
     scope.close()
