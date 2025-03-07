@@ -55,9 +55,9 @@ try:
     wavegen.write(":OUTPut1:STATe OFF")
 
     # Frequency sweep parameters
-    start_freq = 1000      # 1 Hz
-    stop_freq = 200000   # 20 kHz
-    points = 100
+    start_freq = 1000      # 1 KHz
+    stop_freq = 200000   # 200 kHz
+    points = 30
 
     frequencies = np.logspace(np.log10(start_freq), np.log10(stop_freq), points)
     print(f"Starting point-by-point sweep from {start_freq} Hz to {stop_freq} Hz with {points} points")

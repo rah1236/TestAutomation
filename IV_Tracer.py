@@ -12,6 +12,10 @@ rm = pyvisa.ResourceManager()
 psu = rm.open_resource(psu_address)
 dmm = rm.open_resource(dmm_address)
 
+psu.timeout = 5000  # milliseconds
+dmm.timeout = 5000  # milliseconds
+
+
 # Reset instruments
 psu.write('*RST')
 dmm.write('*RST')
@@ -62,7 +66,7 @@ plt.grid(True)
 
 # Source data plot
 plt.subplot(1, 2, 2)
-plt.plot(voltages_src, currents_src, 'r-x')
+plt.plot(voltages_dmm, currents_dmm, 'b-o')
 plt.xlabel('Voltage (V)')
 plt.ylabel('Current (A)')
 plt.title('I-V Curve (Source)')
